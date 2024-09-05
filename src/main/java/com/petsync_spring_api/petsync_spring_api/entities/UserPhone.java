@@ -1,15 +1,23 @@
 package com.petsync_spring_api.petsync_spring_api.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "tb_userphone")
 public class UserPhone {
 
+    @Id
     private Integer code;
     private String number;
 
     @JsonIgnore
+    @ManyToOne
     private User user;
 
     public UserPhone() {

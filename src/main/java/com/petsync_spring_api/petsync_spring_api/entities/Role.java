@@ -1,9 +1,15 @@
 package com.petsync_spring_api.petsync_spring_api.entities;
 
+import jakarta.persistence.*;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "tb_role")
 public class Role {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer code;
     private String name;
 
