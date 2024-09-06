@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -21,7 +22,7 @@ public class UserController {
         List<User> entities = entityService.selectAll();
 
         if(!entities.isEmpty()) {
-            return ResponseEntity.ok().body(entities);
+            return ResponseEntity.ok().body(removeSensitiveDataFromEntity(entities));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -32,7 +33,7 @@ public class UserController {
         User entity = entityService.selectByCode(code);
 
         if(entity != null) {
-            return ResponseEntity.ok().body(entity);
+            return ResponseEntity.ok().body(removeSensitiveDataFromEntity(entity));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -43,7 +44,7 @@ public class UserController {
         User entity = entityService.insert(entityRequest);
 
         if(entity != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(entity);
+            return ResponseEntity.status(HttpStatus.CREATED).body(removeSensitiveDataFromEntity(entity));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -56,7 +57,7 @@ public class UserController {
         HttpStatus httpStatus;
 
         if(entity != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(entity);
+            return ResponseEntity.status(HttpStatus.OK).body(removeSensitiveDataFromEntity(entity));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -77,5 +78,13 @@ public class UserController {
         }
 
         return ResponseEntity.status(httpStatus).build();
+    }
+
+    private List<User> removeSensitiveDataFromEntity (List<User> entities) {
+        return entities.stream().peek(obj -> obj.setPassword(null)).collect(Collectors.toList());
+    }
+
+    private User removeSensitiveDataFromEntity (User entity) {
+         return new User(entity);
     }
 }

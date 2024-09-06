@@ -28,6 +28,14 @@ public class User {
         this.phoneNumbers = new HashSet<>();
     }
 
+    public User(User user) {
+        this.cpf = user.getCpf();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.role = user.getRole();
+        this.phoneNumbers = user.getPhoneNumbers();
+    }
+
     public String getCpf() {
         return cpf;
     }

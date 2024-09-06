@@ -3,8 +3,8 @@ package com.petsync_spring_api.petsync_spring_api.repositories;
 import com.petsync_spring_api.petsync_spring_api.contracts.CRUDImplementation;
 import com.petsync_spring_api.petsync_spring_api.entities.User;
 import com.petsync_spring_api.petsync_spring_api.entities.UserPhone;
+import com.petsync_spring_api.petsync_spring_api.services.RoleService;
 import com.petsync_spring_api.petsync_spring_api.services.UserPhoneService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -13,13 +13,35 @@ import java.util.List;
 @Repository
 public class UserRepository implements CRUDImplementation<User, String> {
 
-    @Autowired
-    private UserPhoneService userPhoneService;
+    private final UserPhoneService userPhoneService;
 
     private final HashSet<User> usersRepositoryMock;
 
-    public UserRepository() {
+    public UserRepository(UserPhoneService userPhoneService, RoleService roleService) {
+        this.userPhoneService = userPhoneService;
         this.usersRepositoryMock = new HashSet<>();
+
+        UserPhone up1 = new UserPhone();
+        up1.setCode(1);
+        up1.setNumber("18558421754");
+
+        UserPhone up2 = new UserPhone();
+        up2.setCode(2);
+        up2.setNumber("18997281458");
+
+        User u1 = new User();
+        u1.setCpf("12354214251");
+        u1.setName("Developer");
+        u1.setEmail("developer@gmail.com");
+        u1.setPassword("$2a$10$IUq9savDOCV8ETjIfKmUH.FeWAw6BmS03hVi1P2lEcJdSns84Lm4W");
+        u1.setRole(roleService.selectByCode(1));
+        u1.getPhoneNumbers().add(up1);
+        u1.getPhoneNumbers().add(up2);
+
+        up1.setUser(u1);
+        up2.setUser(u1);
+
+        usersRepositoryMock.add(u1);
     }
 
     @Override

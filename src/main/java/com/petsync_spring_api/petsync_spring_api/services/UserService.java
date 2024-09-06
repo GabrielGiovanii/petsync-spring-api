@@ -33,7 +33,7 @@ public class UserService implements CRUDImplementation<User, String> {
         Role role = roleService.selectByCode(entity.getRole().getCode());
         entity.setRole(role);
 
-        return (User) removeSensitiveDataFromEntity(entityRepository.insert(entity));
+        return entityRepository.insert(entity);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class UserService implements CRUDImplementation<User, String> {
         Role role = roleService.selectByCode(entity.getRole().getCode());
         entity.setRole(role);
 
-        return (User) removeSensitiveDataFromEntity(entityRepository.update(entity));
+        return entityRepository.update(entity);
     }
 
     @Override
@@ -78,30 +78,11 @@ public class UserService implements CRUDImplementation<User, String> {
 
     @Override
     public User selectByCode(String cpf) {
-        return (User) removeSensitiveDataFromEntity(entityRepository.selectByCode(cpf));
+        return entityRepository.selectByCode(cpf);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<User> selectAll() {
-        return (List<User>) removeSensitiveDataFromEntity(entityRepository.selectAll());
-    }
-
-    private Object removeSensitiveDataFromEntity (Object obj) {
-        if(obj instanceof User entity) {
-            entity.setPassword(null);
-
-            return entity;
-        } else if (obj instanceof List<?> list) {
-            list.forEach(object -> {
-                if (object instanceof User entity) {
-                    entity.setPassword(null);
-                }
-            });
-
-            return list;
-        } else {
-            return  null;
-        }
+        return entityRepository.selectAll();
     }
 }
