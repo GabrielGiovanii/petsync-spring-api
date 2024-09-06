@@ -1,8 +1,10 @@
 package com.petsync_spring_api.petsync_spring_api.entities;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Objects;
 
-public class Role {
+public class Role implements GrantedAuthority {
 
     private Integer code;
     private String name;
@@ -43,5 +45,10 @@ public class Role {
     @Override
     public int hashCode() {
         return Objects.hashCode(name);
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
     }
 }
