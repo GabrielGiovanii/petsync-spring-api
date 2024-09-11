@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/pets/furcolor")
@@ -29,7 +30,9 @@ public class FurColorController {
     @GetMapping(value = "/{code}")
     public ResponseEntity<FurColor> getFurColor(@PathVariable String code) {
         int codeInt = Integer.parseInt(code);
-        return ResponseEntity.ok(furColorService.get(codeInt));
+        Optional<FurColor> furColor = furColorService.get(codeInt);
+
+        return furColor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping(value = "/{code}")
