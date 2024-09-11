@@ -1,18 +1,25 @@
 package com.petsync_spring_api.petsync_spring_api.entities;
 
+import jakarta.persistence.*;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name="tb_user")
 public class User {
 
+    @Id
     private String cpf;
     private String name;
     private String email;
     private String password;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_code", referencedColumnName = "code")
     private Role role;
 
+    @OneToMany(mappedBy = "user")
     private final Set<UserPhone> phoneNumbers;
 
     public User() {
