@@ -1,41 +1,32 @@
 package com.petsync_spring_api.petsync_spring_api.services;
 
-import com.petsync_spring_api.petsync_spring_api.contracts.CRUDImplementation;
 import com.petsync_spring_api.petsync_spring_api.entities.UserPhone;
 import com.petsync_spring_api.petsync_spring_api.repositories.UserPhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserPhoneService implements CRUDImplementation<UserPhone, Integer> {
+public class UserPhoneService {
 
     @Autowired
-    private UserPhoneRepository entityRepository;
+    private UserPhoneRepository userPhoneRepository;
 
-    @Override
-    public UserPhone insert(UserPhone entity) {
-        return entityRepository.insert(entity);
+    public UserPhone put(UserPhone entity) {
+        return userPhoneRepository.save(entity);
     }
 
-    @Override
-    public UserPhone update(UserPhone entity) {
-        return entityRepository.update(entity);
+    public List<UserPhone> findAll() {
+        return userPhoneRepository.findAll();
     }
 
-    @Override
-    public Integer deleteByCode(Integer code) {
-        return entityRepository.deleteByCode(code);
+    public Optional<UserPhone> findById(Integer id) {
+        return userPhoneRepository.findById(id);
     }
 
-    @Override
-    public UserPhone selectByCode(Integer code) {
-        return entityRepository.selectByCode(code);
-    }
-
-    @Override
-    public List<UserPhone> selectAll() {
-        return entityRepository.selectAll();
+    public void deleteById(Integer id) {
+        userPhoneRepository.deleteById(id);
     }
 }

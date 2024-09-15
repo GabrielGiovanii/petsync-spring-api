@@ -1,88 +1,46 @@
 package com.petsync_spring_api.petsync_spring_api.services;
 
-import com.petsync_spring_api.petsync_spring_api.contracts.CRUDImplementation;
 import com.petsync_spring_api.petsync_spring_api.entities.Role;
 import com.petsync_spring_api.petsync_spring_api.entities.User;
-import com.petsync_spring_api.petsync_spring_api.entities.UserPhone;
 import com.petsync_spring_api.petsync_spring_api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserService implements CRUDImplementation<User, String> {
-
-    @Autowired
-    private UserRepository entityRepository;
-
-    @Autowired
-    private UserPhoneService userPhoneService;
+public class UserService {
 
     @Autowired
     private RoleService roleService;
 
-    @Override
-    public User insert(User entity) {
-        entity.getPhoneNumbers().forEach(obj -> {
-            obj.setUser(entity);
+    @Autowired
+    private UserRepository userRepository;
 
-            userPhoneService.insert(obj);
-        });
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        Role role = roleService.selectByCode(entity.getRole().getCode());
-        entity.setRole(role);
+    public User put(User entity) {
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        User returnEntity = userRepository.save(entity);
 
-        return entityRepository.insert(entity);
+        Optional<Role> role = roleService.findById(entity.getRole().getCode());
+        returnEntity.setRole(role.orElseThrow());
+
+        return returnEntity;
     }
 
-    @Override
-    public User update(User entity) {
-        List<UserPhone> entityNumbers = entity.getPhoneNumbers().stream().toList();
-
-        entityNumbers.forEach(obj -> {
-            if(obj.getCode() != null) {
-                userPhoneService.update(obj);
-            } else if(obj.getNumber() != null) {
-                userPhoneService.insert(obj);
-            }
-
-            obj.setUser(entity);
-        });
-
-        List<Integer> inputPhoneNumberCodes = entityNumbers.stream()
-                .map(UserPhone::getCode)
-                .toList();
-
-        List<Integer> repositoryPhoneNumberCodes = userPhoneService.selectAll().stream()
-                .filter(obj -> obj.getUser().equals(entity))
-                .map(UserPhone::getCode)
-                .toList();
-
-        repositoryPhoneNumberCodes.forEach(obj -> {
-            if(!inputPhoneNumberCodes.contains(obj)) {
-                userPhoneService.deleteByCode(obj);
-            }
-        });
-
-        Role role = roleService.selectByCode(entity.getRole().getCode());
-        entity.setRole(role);
-
-        return entityRepository.update(entity);
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
-    @Override
-    public Integer deleteByCode(String cpf) {
-        return entityRepository.deleteByCode(cpf);
+    public Optional<User> findById(String cpf) {
+        return userRepository.findById(cpf);
     }
 
-    @Override
-    public User selectByCode(String cpf) {
-        return entityRepository.selectByCode(cpf);
-    }
-
-    @Override
-    public List<User> selectAll() {
-        return entityRepository.selectAll();
+    public void deleteById(String cpf) {
+        userRepository.deleteById(cpf);
     }
 }

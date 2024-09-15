@@ -1,41 +1,32 @@
 package com.petsync_spring_api.petsync_spring_api.services;
 
-import com.petsync_spring_api.petsync_spring_api.contracts.CRUDImplementation;
 import com.petsync_spring_api.petsync_spring_api.entities.Role;
 import com.petsync_spring_api.petsync_spring_api.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class RoleService implements CRUDImplementation<Role, Integer> {
+public class RoleService {
 
     @Autowired
-    private RoleRepository entityRepository;
+    private RoleRepository roleRepository;
 
-    @Override
-    public Role insert(Role entity) {
-        return entityRepository.insert(entity);
+    public Role put(Role entity) {
+        return roleRepository.save(entity);
     }
 
-    @Override
-    public Role update(Role entity) {
-        return entityRepository.update(entity);
+    public List<Role> findAll() {
+        return roleRepository.findAll();
     }
 
-    @Override
-    public Integer deleteByCode(Integer code) {
-        return entityRepository.deleteByCode(code);
+    public Optional<Role> findById(Integer id) {
+        return roleRepository.findById(id);
     }
 
-    @Override
-    public Role selectByCode(Integer code) {
-        return entityRepository.selectByCode(code);
-    }
-
-    @Override
-    public List<Role> selectAll() {
-        return entityRepository.selectAll();
+    public void deleteById(Integer id) {
+        roleRepository.deleteById(id);
     }
 }

@@ -1,23 +1,22 @@
 package com.petsync_spring_api.petsync_spring_api.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_userphone")
+@Table(name = "tb_userphone", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"number", "user_cpf"})
+})
 public class UserPhone {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer code;
     private String number;
 
-    @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "user_cpf", nullable = false)
     private User user;
 
     public UserPhone() {
