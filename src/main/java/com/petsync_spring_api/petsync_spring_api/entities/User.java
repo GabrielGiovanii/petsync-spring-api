@@ -15,7 +15,7 @@ public class User {
     private String name;
     private String email;
     private String password;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "role_code", referencedColumnName = "code")
     private Role role;
 
@@ -33,6 +33,14 @@ public class User {
         this.password = password;
         this.role = role;
         this.phoneNumbers = new HashSet<>();
+    }
+
+    public User(User user) {
+        this.cpf = user.getCpf();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.role = user.getRole();
+        this.phoneNumbers = user.getPhoneNumbers();
     }
 
     public String getCpf() {

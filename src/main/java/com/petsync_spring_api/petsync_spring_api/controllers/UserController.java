@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -16,66 +18,66 @@ public class UserController {
     @Autowired
     private UserService entityService;
 
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User entityRequest) {
+        if(entityRequest.getCpf() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if(entityService.findById(entityRequest.getCpf()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        User entity = entityService.put(entityRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(removeSensitiveDataFromEntity(entity));
+    }
+
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestBody User entityRequest) {
+        if(entityRequest.getCpf() == null) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        User entity = entityService.put(entityRequest);
+
+        return ResponseEntity.status(HttpStatus.OK).body(removeSensitiveDataFromEntity(entity));
+    }
+
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
-        List<User> entities = entityService.selectAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> entities = entityService.findAll();
 
         if(!entities.isEmpty()) {
-            return ResponseEntity.ok().body(entities);
+            return ResponseEntity.ok().body(removeSensitiveDataFromEntity(entities));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @GetMapping(value = "/{code}")
-    public ResponseEntity<User> findByCode(@PathVariable String code) {
-        User entity = entityService.selectByCode(code);
+    public ResponseEntity<User> getUser(@PathVariable String code) {
+        Optional<User> entity = entityService.findById(code);
 
-        if(entity != null) {
-            return ResponseEntity.ok().body(entity);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    @PostMapping
-    public ResponseEntity<User> insert(@RequestBody User entityRequest) {
-        User entity = entityService.insert(entityRequest);
-
-        if(entity != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(entity);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PutMapping
-    public ResponseEntity<User> update(@RequestBody User entityRequest) {
-        User entity = entityService.update(entityRequest);
-
-        HttpStatus httpStatus;
-
-        if(entity != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(entity);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return entity.map(user ->
+                ResponseEntity
+                        .ok()
+                        .body(removeSensitiveDataFromEntity(user)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping(value = "/{code}")
-    public ResponseEntity<Void> deleteByCode(@PathVariable String code) {
-        int numberOfAffectedRows = entityService.deleteByCode(code);
+    public ResponseEntity<Void> deleteUser(@PathVariable String code) {
+        entityService.deleteById(code);
 
-        HttpStatus httpStatus;
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
-        if(numberOfAffectedRows == 1) {
-            httpStatus = HttpStatus.NO_CONTENT;
-        } else if (numberOfAffectedRows == 0) {
-            httpStatus = HttpStatus.NOT_FOUND;
-        } else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
+    private List<User> removeSensitiveDataFromEntity (List<User> entities) {
+        return entities.stream().peek(obj -> obj.setPassword(null)).collect(Collectors.toList());
+    }
 
-        return ResponseEntity.status(httpStatus).build();
+    private User removeSensitiveDataFromEntity (User entity) {
+         return new User(entity);
     }
 }

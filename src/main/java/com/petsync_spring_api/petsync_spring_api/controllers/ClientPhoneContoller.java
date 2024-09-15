@@ -21,14 +21,9 @@ public class ClientPhoneContoller {
 
     @PostMapping()
     public ResponseEntity<ClientPhone> insert(@RequestBody ClientPhone clientPhone) {
-        try{
-            clientPhone = clientPhoneService.put(clientPhone);
+        clientPhone = clientPhoneService.put(clientPhone);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(clientPhone);
-        } catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientPhone);
     }
 
     @GetMapping(value = "/{code}")

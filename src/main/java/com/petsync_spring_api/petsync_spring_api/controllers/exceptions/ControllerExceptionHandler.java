@@ -1,8 +1,10 @@
 package com.petsync_spring_api.petsync_spring_api.controllers.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,10 +21,10 @@ public class ControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {
+            JpaObjectRetrievalFailureException.class,
             MethodArgumentTypeMismatchException.class,
             MethodArgumentNotValidException.class,
-            HttpMessageNotReadableException.class/*,
-            DataIntegrityViolationException.class*/
+            HttpMessageNotReadableException.class
     })
     @ResponseBody
     public Map<String, String> methodArgumentNotValid(Exception e) {
@@ -43,6 +45,11 @@ public class ControllerExceptionHandler {
         }*/
 
         return errors;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> dataIntegrityViolation(DataIntegrityViolationException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getClass().getSimpleName());
     }
 
     @ExceptionHandler(SecurityException.class)
