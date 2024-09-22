@@ -33,7 +33,7 @@ public class ScheduleService {
         repository.deleteById(id);
     }
 
-    public Schedule createSchedule(ScheduleDTO dto) {
+    public Schedule createEntity(ScheduleDTO dto) {
         Schedule schedule = new Schedule();
         schedule.setCode(dto.getCode());
         schedule.setDescription(dto.getDescription());

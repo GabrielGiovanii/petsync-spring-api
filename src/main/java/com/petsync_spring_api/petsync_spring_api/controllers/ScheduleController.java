@@ -19,9 +19,9 @@ public class ScheduleController {
     private ScheduleService service;
 
     @PostMapping
-    public ResponseEntity<ScheduleDTO> createSchedule(@RequestBody ScheduleDTO dto) {
+    public ResponseEntity<ScheduleDTO> createEntity(@RequestBody ScheduleDTO dto) {
 
-        Schedule entity = service.put(service.createSchedule(dto));
+        Schedule entity = service.put(service.createEntity(dto));
 
         if(entity != null) {
             return ResponseEntity.status(HttpStatus.OK).body(new ScheduleDTO(entity));
@@ -31,7 +31,7 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleDTO>> getAllSchedules() {
+    public ResponseEntity<List<ScheduleDTO>> getAllEntities() {
         List<Schedule> entities = service.findAll();
 
         if(!entities.isEmpty()) {
@@ -42,7 +42,7 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "/{code}")
-    public ResponseEntity<ScheduleDTO> getSchedule(@PathVariable Integer code) {
+    public ResponseEntity<ScheduleDTO> getEntity(@PathVariable Integer code) {
         Optional<Schedule> entity = service.findById(code);
 
         return entity.map(obj -> ResponseEntity
@@ -52,7 +52,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping(value = "/{code}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Integer code) {
+    public ResponseEntity<Void> deleteEntity(@PathVariable Integer code) {
         service.deleteById(code);
 
         return ResponseEntity.status(HttpStatus.OK).build();

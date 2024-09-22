@@ -1,5 +1,6 @@
 package com.petsync_spring_api.petsync_spring_api.services;
 
+import com.petsync_spring_api.petsync_spring_api.dtos.RoleDTO;
 import com.petsync_spring_api.petsync_spring_api.entities.Role;
 import com.petsync_spring_api.petsync_spring_api.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,13 @@ public class RoleService {
 
     public void deleteById(Integer id) {
         roleRepository.deleteById(id);
+    }
+
+    public Role createEntity(RoleDTO dto) {
+        Role entity = new Role();
+        entity.setName(dto.getName());
+        entity.setCode(dto.getCode());
+
+        return entity;
     }
 }
