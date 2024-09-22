@@ -1,5 +1,6 @@
 package com.petsync_spring_api.petsync_spring_api.services;
 
+import com.petsync_spring_api.petsync_spring_api.dtos.StatusDTO;
 import com.petsync_spring_api.petsync_spring_api.entities.Status;
 import com.petsync_spring_api.petsync_spring_api.repositories.StatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,13 @@ public class StatusService {
 
     public void deleteById(Integer id) {
         statusRepository.deleteById(id);
+    }
+
+    public Status createEntity(StatusDTO dto) {
+        Status entity = new Status();
+        entity.setName(dto.getName());
+        entity.setCode(dto.getCode());
+
+        return entity;
     }
 }
