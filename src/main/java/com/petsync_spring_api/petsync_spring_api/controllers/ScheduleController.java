@@ -20,6 +20,9 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleDTO> createEntity(@RequestBody ScheduleDTO dto) {
+        if(dto.getUserCpf() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         Schedule entity = service.put(service.createEntity(dto));
 

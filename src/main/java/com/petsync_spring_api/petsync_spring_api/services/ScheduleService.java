@@ -34,15 +34,15 @@ public class ScheduleService {
     }
 
     public Schedule createEntity(ScheduleDTO dto) {
-        Schedule schedule = new Schedule();
-        schedule.setCode(dto.getCode());
-        schedule.setDescription(dto.getDescription());
-        schedule.setStatus(dto.getStatus());
+        Schedule entity = new Schedule();
+        entity.setCode(dto.getCode());
+        entity.setDescription(dto.getDescription());
+        entity.setStatus(dto.getStatus());
 
         if(dto.getPetCode() != null) {
             Pet pet = new Pet();
             pet.setCode(dto.getPetCode());
-            schedule.setPet(pet);
+            entity.setPet(pet);
         }
 
         if(dto.getCode() != null) {
@@ -50,16 +50,16 @@ public class ScheduleService {
             scheduleBD = repository.findById(dto.getCode());
 
             if (scheduleBD.isPresent()) {
-                schedule.setDate(scheduleBD.get().getDate());
-                schedule.setUser(scheduleBD.get().getUser());
+                entity.setDate(scheduleBD.get().getDate());
+                entity.setUser(scheduleBD.get().getUser());
 
             }
         } else {
             User user = new User();
             user.setCpf(dto.getUserCpf());
-            schedule.setUser(user);
+            entity.setUser(user);
         }
 
-        return schedule;
+        return entity;
     }
 }

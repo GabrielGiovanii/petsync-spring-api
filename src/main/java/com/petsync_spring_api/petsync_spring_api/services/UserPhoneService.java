@@ -1,5 +1,7 @@
 package com.petsync_spring_api.petsync_spring_api.services;
 
+import com.petsync_spring_api.petsync_spring_api.dtos.UserPhoneDTO;
+import com.petsync_spring_api.petsync_spring_api.entities.User;
 import com.petsync_spring_api.petsync_spring_api.entities.UserPhone;
 import com.petsync_spring_api.petsync_spring_api.repositories.UserPhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +30,20 @@ public class UserPhoneService {
 
     public void deleteById(Integer id) {
         userPhoneRepository.deleteById(id);
+    }
+
+    public UserPhone createEntity(UserPhoneDTO dto) {
+        UserPhone entity = new UserPhone();
+        entity.setCode(dto.getCode());
+        entity.setNumber(dto.getNumber());
+
+        if(dto.getUserCpf() != null) {
+            User user = new User();
+            user.setCpf(dto.getUserCpf());
+            entity.setUser(user);
+            user.getPhoneNumbers().add(entity);
+        }
+
+        return entity;
     }
 }
