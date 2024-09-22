@@ -1,9 +1,11 @@
 package com.petsync_spring_api.petsync_spring_api.config;
 
 import com.petsync_spring_api.petsync_spring_api.entities.Role;
+import com.petsync_spring_api.petsync_spring_api.entities.Status;
 import com.petsync_spring_api.petsync_spring_api.entities.User;
 import com.petsync_spring_api.petsync_spring_api.entities.UserPhone;
 import com.petsync_spring_api.petsync_spring_api.services.RoleService;
+import com.petsync_spring_api.petsync_spring_api.services.StatusService;
 import com.petsync_spring_api.petsync_spring_api.services.UserPhoneService;
 import com.petsync_spring_api.petsync_spring_api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class DevH2Config implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private StatusService statusService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -64,5 +69,12 @@ public class DevH2Config implements CommandLineRunner {
         up2.setUser(u1);
 
         Arrays.asList(up1, up2).forEach(userPhone -> userPhoneService.put(userPhone));
+
+        //Status
+        Status s1 = new Status("EM_ANDAMENTO");
+        Status s2 = new Status("CONCLUIDO");
+        Status s3 = new Status("CANCELADO");
+
+        Arrays.asList(s1, s2, s3).forEach(status -> statusService.put(status));
     }
 }

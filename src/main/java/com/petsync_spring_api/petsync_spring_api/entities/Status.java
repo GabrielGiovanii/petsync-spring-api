@@ -8,9 +8,14 @@ public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int code;
+    @Column(unique = true)
     private String name;
 
     public Status() {
+    }
+
+    public Status(String name) {
+        this.name = name;
     }
 
     public Status(int code, String name) {
