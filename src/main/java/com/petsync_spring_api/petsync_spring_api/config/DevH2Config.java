@@ -51,6 +51,7 @@ public class DevH2Config implements CommandLineRunner {
         u1.setName("Developer");
         u1.setEmail("developer@gmail.com");
         u1.setPassword("123321");
+        userService.encryptPassword(u1);
         u1.setRole(roleService.findById(1).orElseThrow());
         userService.put(u1);
 

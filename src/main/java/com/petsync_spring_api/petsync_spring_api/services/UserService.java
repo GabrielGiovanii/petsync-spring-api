@@ -1,5 +1,6 @@
 package com.petsync_spring_api.petsync_spring_api.services;
 
+import com.petsync_spring_api.petsync_spring_api.dtos.UserSaveDTO;
 import com.petsync_spring_api.petsync_spring_api.entities.Role;
 import com.petsync_spring_api.petsync_spring_api.entities.User;
 import com.petsync_spring_api.petsync_spring_api.repositories.UserRepository;
@@ -23,13 +24,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User put(User entity) {
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        User returnEntity = userRepository.save(entity);
-
-        Optional<Role> role = roleService.findById(entity.getRole().getCode());
-        returnEntity.setRole(role.orElseThrow());
-
-        return returnEntity;
+        return userRepository.save(entity);
     }
 
     public List<User> findAll() {
@@ -42,5 +37,27 @@ public class UserService {
 
     public void deleteById(String cpf) {
         userRepository.deleteById(cpf);
+    }
+
+    public User createEntity(UserSaveDTO dto) {
+        User entity = new User();
+        entity.setCpf(dto.getCpf());
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setPassword(dto.getPassword());
+
+        encryptPassword(entity);
+
+        if (dto.getRoleCode() != null) {
+            Role role = new Role();
+            role.setCode(dto.getRoleCode());
+            entity.setRole(role);
+        }
+
+        return entity;
+    }
+
+    public void encryptPassword(User entity) {
+        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
     }
 }
