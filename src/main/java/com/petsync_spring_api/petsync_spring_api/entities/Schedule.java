@@ -1,5 +1,6 @@
 package com.petsync_spring_api.petsync_spring_api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -9,11 +10,12 @@ import java.util.Date;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int code;
+    private Integer code;
     private String description;
     private Date date;
-    private int status;
-    @OneToOne
+    private Integer status;
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "user_cpf", referencedColumnName = "cpf")
     private User user;
     @OneToOne
@@ -21,22 +23,23 @@ public class Schedule {
     private Pet pet;
 
     public Schedule() {
+        this.date = new Date();
     }
 
-    public Schedule(int code, String description, Date date, int status, User user, Pet pet) {
+    public Schedule(int code, String description, Integer status, User user, Pet pet) {
         this.code = code;
         this.description = description;
-        this.date = date;
+        this.date = new Date();
         this.status = status;
         this.user = user;
         this.pet = pet;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 
@@ -56,11 +59,11 @@ public class Schedule {
         this.date = date;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

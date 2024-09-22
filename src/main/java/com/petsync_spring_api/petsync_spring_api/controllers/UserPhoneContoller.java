@@ -1,5 +1,6 @@
 package com.petsync_spring_api.petsync_spring_api.controllers;
 
+import com.petsync_spring_api.petsync_spring_api.dtos.UserPhoneDTO;
 import com.petsync_spring_api.petsync_spring_api.entities.UserPhone;
 import com.petsync_spring_api.petsync_spring_api.services.UserPhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,32 +19,35 @@ public class UserPhoneContoller {
     private UserPhoneService userPhoneService;
 
     @PostMapping()
-    public ResponseEntity<UserPhone> createUserPhones(@RequestBody UserPhone entity) {
-        if(entity.getUser() == null || entity.getUser().getCpf() == null) {
+    public ResponseEntity<UserPhoneDTO> createUserPhones(@RequestBody UserPhoneDTO dto) {
+        if(dto.getUserCpf() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        entity = userPhoneService.put(entity);
+         UserPhone entity = userPhoneService.put(userPhoneService.createEntity(dto));
 
-        return ResponseEntity.status(HttpStatus.OK).body(entity);
+        return ResponseEntity.status(HttpStatus.OK).body(new UserPhoneDTO(entity));
     }
 
     @GetMapping(value = "/{code}")
-    public ResponseEntity<UserPhone> getAllUserPhoness(@PathVariable Integer code) {
+    public ResponseEntity<UserPhoneDTO> getAllUserPhoness(@PathVariable Integer code) {
         Optional<UserPhone> entity = userPhoneService.findById(code);
 
-        return entity.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return entity.map(userPhone -> ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(new UserPhoneDTO(userPhone)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public ResponseEntity<List<UserPhone>> getUserPhones() {
+    public ResponseEntity<List<UserPhoneDTO>> getUserPhones() {
         List<UserPhone> entities = userPhoneService.findAll();
 
-        return ResponseEntity.ok(entities);
+        return ResponseEntity.ok(entities.stream().map(UserPhoneDTO::new).toList());
     }
 
     @DeleteMapping(value = "/{code}")
-    public ResponseEntity<UserPhone> deleteUserPhones(@PathVariable Integer code) {
+    public ResponseEntity<Void> deleteUserPhones(@PathVariable Integer code) {
         userPhoneService.deleteById(code);
 
         return ResponseEntity.ok().build();

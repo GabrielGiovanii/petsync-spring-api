@@ -12,11 +12,11 @@ public class Pet {
     private Integer code;
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "animal_code", referencedColumnName = "code")
     private AnimalType animalType;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "furcolor_code", referencedColumnName = "code")
     private FurColor furColor;
 
@@ -28,7 +28,7 @@ public class Pet {
     private Integer pet_condition;
     private String observation;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "client_cpf", referencedColumnName = "cpf")
     private Client client;
 

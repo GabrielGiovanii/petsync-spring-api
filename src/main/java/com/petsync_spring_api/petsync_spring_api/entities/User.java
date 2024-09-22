@@ -22,8 +22,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private final Set<UserPhone> phoneNumbers;
 
+    @OneToMany(mappedBy = "user")
+    private final Set<Schedule> schedules;
+
     public User() {
         this.phoneNumbers = new HashSet<>();
+        this.schedules = new HashSet<>();
     }
 
     public User(String cpf, String name, String email, String password, Role role) {
@@ -33,6 +37,7 @@ public class User {
         this.password = password;
         this.role = role;
         this.phoneNumbers = new HashSet<>();
+        this.schedules = new HashSet<>();
     }
 
     public User(User user) {
@@ -41,6 +46,7 @@ public class User {
         this.email = user.getEmail();
         this.role = user.getRole();
         this.phoneNumbers = user.getPhoneNumbers();
+        this.schedules = user.getSchedules();
     }
 
     public String getCpf() {
@@ -85,6 +91,10 @@ public class User {
 
     public Set<UserPhone> getPhoneNumbers() {
         return phoneNumbers;
+    }
+
+    public Set<Schedule> getSchedules() {
+        return schedules;
     }
 
     @Override

@@ -7,10 +7,15 @@ import jakarta.persistence.*;
 public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int code;
+    private Integer code;
+    @Column(unique = true)
     private String name;
 
     public Status() {
+    }
+
+    public Status(String name) {
+        this.name = name;
     }
 
     public Status(int code, String name) {
@@ -18,11 +23,11 @@ public class Status {
         this.name = name;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

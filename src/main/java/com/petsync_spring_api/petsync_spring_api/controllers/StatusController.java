@@ -1,8 +1,8 @@
 package com.petsync_spring_api.petsync_spring_api.controllers;
 
-import com.petsync_spring_api.petsync_spring_api.dtos.RoleDTO;
-import com.petsync_spring_api.petsync_spring_api.entities.Role;
-import com.petsync_spring_api.petsync_spring_api.services.RoleService;
+import com.petsync_spring_api.petsync_spring_api.dtos.StatusDTO;
+import com.petsync_spring_api.petsync_spring_api.entities.Status;
+import com.petsync_spring_api.petsync_spring_api.services.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,41 +12,41 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/roles")
-public class RoleController {
+@RequestMapping(value = "/status")
+public class StatusController {
 
     @Autowired
-    private RoleService service;
+    private StatusService service;
 
     @PostMapping
-    public ResponseEntity<RoleDTO> createEntity(@RequestBody RoleDTO dto) {
+    public ResponseEntity<StatusDTO> createEntity(@RequestBody StatusDTO dto) {
 
-        Role entity = service.put(service.createEntity(dto));
+        Status entity = service.put(service.createEntity(dto));
 
         if(entity != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(new RoleDTO(entity));
+            return ResponseEntity.status(HttpStatus.OK).body(new StatusDTO(entity));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<RoleDTO>> getAllEntities() {
-        List<Role> entities = service.findAll();
+    public ResponseEntity<List<StatusDTO>> getAllEntities() {
+        List<Status> entities = service.findAll();
 
         if(!entities.isEmpty()) {
-            return ResponseEntity.ok().body(entities.stream().map(RoleDTO::new).toList());
+            return ResponseEntity.ok().body(entities.stream().map(StatusDTO::new).toList());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @GetMapping(value = "/{code}")
-    public ResponseEntity<RoleDTO> getEntity(@PathVariable Integer code) {
-        Optional<Role> entity = service.findById(code);
+    public ResponseEntity<StatusDTO> getEntity(@PathVariable Integer code) {
+        Optional<Status> entity = service.findById(code);
 
         return entity.map(obj -> ResponseEntity
-                        .ok().body(new RoleDTO(obj)))
+                        .ok().body(new StatusDTO(obj)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .build());
     }
