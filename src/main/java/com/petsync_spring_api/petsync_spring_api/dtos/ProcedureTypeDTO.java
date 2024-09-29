@@ -10,9 +10,9 @@ public class ProcedureTypeDTO {
     public ProcedureTypeDTO() {
     }
 
-    public ProcedureTypeDTO(ProcedureType dto) {
-        this.code = dto.getCode();
-        this.name = dto.getName();
+    public ProcedureTypeDTO(ProcedureType entity) {
+        this.code = entity.getCode();
+        this.name = entity.getName();
     }
 
     public int getCode() {

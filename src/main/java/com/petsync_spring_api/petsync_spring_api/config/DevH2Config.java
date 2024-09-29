@@ -81,13 +81,13 @@ public class DevH2Config implements CommandLineRunner {
         //Schedule
         Schedule sc1 = new Schedule();
         sc1.setDescription("Do a full checkup");
-        sc1.setStatus(s1.getCode());
+        sc1.setStatus(s1);
         sc1.setUser(u1);
         sc1.setPet(null);
 
         Schedule sc2 = new Schedule();
         sc2.setDescription("Routine appointment for puppies");
-        sc2.setStatus(s1.getCode());
+        sc2.setStatus(s2);
         sc2.setUser(u1);
         sc2.setPet(null);
 

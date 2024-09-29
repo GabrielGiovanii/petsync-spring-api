@@ -13,7 +13,9 @@ public class Schedule {
     private Integer code;
     private String description;
     private Date date;
-    private Integer status;
+    @ManyToOne
+    @JoinColumn(name = "status_code", referencedColumnName = "code")
+    private Status status;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_cpf", referencedColumnName = "cpf")
@@ -26,7 +28,7 @@ public class Schedule {
         this.date = new Date();
     }
 
-    public Schedule(int code, String description, Integer status, User user, Pet pet) {
+    public Schedule(int code, String description, Status status, User user, Pet pet) {
         this.code = code;
         this.description = description;
         this.date = new Date();
@@ -59,11 +61,11 @@ public class Schedule {
         this.date = date;
     }
 
-    public Integer getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
