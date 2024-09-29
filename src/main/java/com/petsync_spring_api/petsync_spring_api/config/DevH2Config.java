@@ -32,6 +32,9 @@ public class DevH2Config implements CommandLineRunner {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private ProcedureTypeService procedureTypeService;
+
     @Override
     public void run(String... args) throws Exception {
         //Roles
@@ -92,5 +95,13 @@ public class DevH2Config implements CommandLineRunner {
         u1.getSchedules().add(sc2);
 
         Arrays.asList(sc1, sc2).forEach(obj -> scheduleService.put(obj));
+
+        //ProcedureType
+        ProcedureType pt1 = new ProcedureType("SURGERY");
+        ProcedureType pt2 = new ProcedureType("VACCINATION");
+        ProcedureType pt3 = new ProcedureType("CONSULTATION");
+        ProcedureType pt4 = new ProcedureType("EXAMINATION");
+
+        Arrays.asList(pt1, pt2, pt3, pt4).forEach(obj -> procedureTypeService.put(obj));
     }
 }
