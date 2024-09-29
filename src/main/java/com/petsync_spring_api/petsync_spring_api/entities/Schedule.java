@@ -13,26 +13,31 @@ public class Schedule {
     private Integer code;
     private String description;
     private Date date;
-    private Integer status;
+    @ManyToOne
+    @JoinColumn(name = "status_code", referencedColumnName = "code")
+    private Status status;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_cpf", referencedColumnName = "cpf")
     private User user;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "pet_code", referencedColumnName = "code")
     private Pet pet;
+    @OneToOne(mappedBy = "schedule")
+    private Procedure procedure;
 
     public Schedule() {
         this.date = new Date();
     }
 
-    public Schedule(int code, String description, Integer status, User user, Pet pet) {
+    public Schedule(int code, String description, Status status, User user, Pet pet, Procedure procedure) {
         this.code = code;
         this.description = description;
         this.date = new Date();
         this.status = status;
         this.user = user;
         this.pet = pet;
+        this.procedure = procedure;
     }
 
     public Integer getCode() {
@@ -59,11 +64,11 @@ public class Schedule {
         this.date = date;
     }
 
-    public Integer getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -81,5 +86,13 @@ public class Schedule {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public Procedure getProcedure() {
+        return procedure;
+    }
+
+    public void setProcedure(Procedure procedure) {
+        this.procedure = procedure;
     }
 }

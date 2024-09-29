@@ -8,9 +8,14 @@ public class ProcedureType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int code;
+    @Column(unique = true)
     private String name;
 
     public ProcedureType() {
+    }
+
+    public ProcedureType(String name) {
+        this.name = name;
     }
 
     public ProcedureType(int code, String name) {

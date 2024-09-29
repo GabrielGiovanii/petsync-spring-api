@@ -13,6 +13,10 @@ public class AnimalType {
     public AnimalType() {
     }
 
+    public AnimalType(String name) {
+        this.name = name;
+    }
+
     public AnimalType(int code, String name) {
         this.code = code;
         this.name = name;

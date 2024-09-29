@@ -3,6 +3,7 @@ package com.petsync_spring_api.petsync_spring_api.services;
 import com.petsync_spring_api.petsync_spring_api.dtos.ScheduleDTO;
 import com.petsync_spring_api.petsync_spring_api.entities.Pet;
 import com.petsync_spring_api.petsync_spring_api.entities.Schedule;
+import com.petsync_spring_api.petsync_spring_api.entities.Status;
 import com.petsync_spring_api.petsync_spring_api.entities.User;
 import com.petsync_spring_api.petsync_spring_api.repositories.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class ScheduleService {
 
     @Autowired
     private ScheduleRepository repository;
+
+    @Autowired
+    private StatusService statusService;
 
     public Schedule put(Schedule entity) {
         return repository.save(entity);
@@ -37,7 +41,9 @@ public class ScheduleService {
         Schedule entity = new Schedule();
         entity.setCode(dto.getCode());
         entity.setDescription(dto.getDescription());
-        entity.setStatus(dto.getStatus());
+
+        Optional<Status> status = statusService.findById(dto.getStatusCode());
+        status.ifPresent(entity::setStatus);
 
         if(dto.getPetCode() != null) {
             Pet pet = new Pet();

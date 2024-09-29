@@ -9,10 +9,8 @@ public class ScheduleDTO {
     private Integer code;
     private String description;
     private Date date;
-    private Integer status;
-
+    private Integer statusCode;
     private String userCpf;
-
     private Integer petCode;
 
     public ScheduleDTO() {
@@ -22,7 +20,10 @@ public class ScheduleDTO {
         this.code = entity.getCode();
         this.description = entity.getDescription();
         this.date = entity.getDate();
-        this.status = entity.getStatus();
+
+        if(entity.getStatus() != null) {
+            this.statusCode = entity.getStatus().getCode();
+        }
 
         if (entity.getUser() != null) {
             this.userCpf = entity.getUser().getCpf();
@@ -57,12 +58,12 @@ public class ScheduleDTO {
         this.date = date;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getStatusCode() {
+        return statusCode;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStatusCode(Integer status) {
+        this.statusCode = status;
     }
 
     public String getUserCpf() {
