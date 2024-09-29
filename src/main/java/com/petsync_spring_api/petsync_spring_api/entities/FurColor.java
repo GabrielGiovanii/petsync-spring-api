@@ -13,6 +13,10 @@ public class FurColor {
     public FurColor() {
     }
 
+    public FurColor(String name) {
+        this.name = name;
+    }
+
     public FurColor(int code, String name) {
         this.code = code;
         this.name = name;

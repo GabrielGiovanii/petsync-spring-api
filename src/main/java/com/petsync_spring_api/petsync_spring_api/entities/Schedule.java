@@ -20,7 +20,7 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "user_cpf", referencedColumnName = "cpf")
     private User user;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "pet_code", referencedColumnName = "code")
     private Pet pet;
     @OneToOne(mappedBy = "schedule")

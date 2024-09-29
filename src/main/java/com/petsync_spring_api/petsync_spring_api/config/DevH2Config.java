@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,8 +40,16 @@ public class DevH2Config implements CommandLineRunner {
     @Autowired
     private ProcedureService procedureService;
 
+    @Autowired
+    private AnimalTypeService animalTypeService;
+
+    @Autowired
+    private FurColorService furColorService;
+
     @Override
     public void run(String... args) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+
         //Roles
         Role r1 = new Role();
         r1.setName("REPRESENTATIVE");
@@ -82,11 +91,41 @@ public class DevH2Config implements CommandLineRunner {
 
         Arrays.asList(s1, s2, s3).forEach(obj -> statusService.put(obj));
 
+        /*//AnimalType
+        AnimalType ap1 = new AnimalType("RABBIT");
+        AnimalType ap2 = new AnimalType("CAT");
+        AnimalType ap3 = new AnimalType("DOG");
+
+        Arrays.asList(ap1, ap2, ap3).forEach(obj -> animalTypeService.put(obj));
+
+        //FurColor
+        FurColor fc1 = new FurColor("BLACK");
+        FurColor fc2 = new FurColor("WHITE");
+        FurColor fc3 = new FurColor("GRAY");
+        FurColor fc4 = new FurColor("CARAMEL");
+        FurColor fc5 = new FurColor("YELLOW");
+        FurColor fc6 = new FurColor("ORANGE");
+        FurColor fc7 = new FurColor("BROWN");
+        FurColor fc8 = new FurColor("MULTICOLORED");
+
+        Arrays.asList(fc1, fc2, fc3, fc4, fc5, fc6, fc7, fc8).forEach(obj -> furColorService.put(obj));
+
+        //Pet
+        Pet pe1 = new Pet();
+        pe1.setCode(1);
+        pe1.setName("Joseph");
+        pe1.setAnimalType(ap3);
+        pe1.setFurColor(fc1);
+        pe1.setBirthDate(format.parse("09/06/2020"));
+        pe1.setWeight(20);
+        pe1.setObservation("Normal");*/
+
         //Schedule
         Schedule sc1 = new Schedule();
         sc1.setDescription("Do a full checkup");
         sc1.setStatus(s1);
         sc1.setUser(u1);
+        //sc1.setPet(pe1);
         sc1.setPet(null);
 
         Schedule sc2 = new Schedule();
