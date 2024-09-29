@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @Profile("dev-h2")
@@ -34,6 +35,9 @@ public class DevH2Config implements CommandLineRunner {
 
     @Autowired
     private ProcedureTypeService procedureTypeService;
+
+    @Autowired
+    private ProcedureService procedureService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -103,5 +107,18 @@ public class DevH2Config implements CommandLineRunner {
         ProcedureType pt4 = new ProcedureType("EXAMINATION");
 
         Arrays.asList(pt1, pt2, pt3, pt4).forEach(obj -> procedureTypeService.put(obj));
+
+        //Procedure
+        Procedure p1 = new Procedure();
+        p1.setCost(159.99);
+        p1.setStatus(s1);
+        p1.setPrescription("NA");
+        p1.setUser(u1);
+        p1.setProcedureType(pt4);
+        p1.setSchedule(sc1);
+        u1.getProcedures().add(p1);
+        u1.getSchedules().add(sc1);
+
+        List.of(p1).forEach(obj -> procedureService.put(obj));
     }
 }

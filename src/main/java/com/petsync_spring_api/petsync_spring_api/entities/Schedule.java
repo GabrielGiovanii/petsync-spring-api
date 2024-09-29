@@ -23,18 +23,21 @@ public class Schedule {
     @OneToOne
     @JoinColumn(name = "pet_code", referencedColumnName = "code")
     private Pet pet;
+    @OneToOne(mappedBy = "schedule")
+    private Procedure procedure;
 
     public Schedule() {
         this.date = new Date();
     }
 
-    public Schedule(int code, String description, Status status, User user, Pet pet) {
+    public Schedule(int code, String description, Status status, User user, Pet pet, Procedure procedure) {
         this.code = code;
         this.description = description;
         this.date = new Date();
         this.status = status;
         this.user = user;
         this.pet = pet;
+        this.procedure = procedure;
     }
 
     public Integer getCode() {
@@ -83,5 +86,13 @@ public class Schedule {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    public Procedure getProcedure() {
+        return procedure;
+    }
+
+    public void setProcedure(Procedure procedure) {
+        this.procedure = procedure;
     }
 }
