@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FurColorService {
@@ -20,8 +21,8 @@ public class FurColorService {
     public List<FurColor> getAll() {
         return furColorRepository.findAll();
     }
-    public FurColor get(int id) {
-        return furColorRepository.findById(id).get();
+    public Optional<FurColor> get(int id) {
+        return furColorRepository.findById(id);
     }
     public void delete(int id) {
         furColorRepository.deleteById(id);
